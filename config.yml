@@ -1,0 +1,326 @@
+# Configuração do PurusWin
+# Ferramenta CLI para Técnicos de Informática
+# ==========================================
+
+# Configurações Gerais
+general:
+  # Modo simulação por padrão (true = não executa ações destrutivas)
+  simulate: true
+  
+  # Nível de log (Debug, Info, Warning, Error)
+  log_level: "Info"
+  
+  # Diretório de logs
+  logs_directory: "./Logs"
+  
+  # Retenção de logs em dias
+  log_retention_days: 30
+  
+  # Timeout padrão para operações em milissegundos
+  default_timeout: 30000
+  
+  # Número máximo de tentativas para operações
+  max_retries: 3
+  
+  # Verificar privilégios administrativos
+  require_admin: true
+
+# Configurações de Downloads
+downloads:
+  # Diretório de downloads rápidos
+  directory: "./DownloadsRapidos"
+  
+  # Extensões de arquivo permitidas para instalação
+  allowed_extensions:
+    - ".exe"
+    - ".msi"
+    - ".msix"
+    - ".appx"
+  
+  # Verificação de integridade obrigatória
+  require_hash_verification: true
+  
+  # Algoritmo de hash padrão
+  default_hash_algorithm: "SHA256"
+  
+  # Hashes conhecidos de softwares (SHA256)
+  known_hashes:
+    # Microsoft Office
+    "office_2021_professional.exe": "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456"
+    "office_365_setup.exe": "b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567a"
+    
+    # Navegadores
+    "chrome_installer.exe": "c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567ab2"
+    "firefox_installer.exe": "d4e5f6789012345678901234567890abcdef1234567890abcdef1234567ab2c3"
+    "edge_installer.exe": "e5f6789012345678901234567890abcdef1234567890abcdef1234567ab2c3d4"
+    
+    # Utilitários
+    "7zip_installer.exe": "f6789012345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5"
+    "notepadpp_installer.exe": "789012345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5f6"
+    "vlc_installer.exe": "89012345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5f67"
+    
+    # Antivírus
+    "defender_update.exe": "9012345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5f678"
+    
+    # Drivers
+    "intel_graphics_driver.exe": "012345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5f6789"
+    "nvidia_driver.exe": "12345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5f6789a"
+
+# Configurações de Impressoras
+printers:
+  # Backup automático antes de reset
+  create_backup: true
+  
+  # Diretório de backup
+  backup_directory: "./Logs/printer_backups"
+  
+  # Lista de impressoras confiáveis (não requer confirmação extra)
+  trusted_printers:
+    - "HP LaserJet"
+    - "Canon PIXMA"
+    - "Epson EcoTank"
+    - "Brother DCP"
+    - "Samsung Xpress"
+  
+  # Serviços relacionados a impressoras
+  related_services:
+    - "Spooler"
+    - "PrintNotify"
+    - "PrintWorkflowUserSvc"
+  
+  # Timeout para operações de serviço em milissegundos
+  service_timeout: 30000
+  
+  # Aguardar entre parar e iniciar serviços (ms)
+  service_restart_delay: 2000
+
+# Configurações de Ativação (APENAS LEGÍTIMA)
+activation:
+  # AVISO: Este sistema suporta APENAS ativação legítima com chaves válidas
+  # NÃO inclui, reproduz ou automatiza ativadores ilegais, KMS pirata ou cracks
+  
+  # Mascarar chaves nos logs (mostrar apenas primeiros/últimos caracteres)
+  mask_keys_in_logs: true
+  
+  # Número de caracteres visíveis no início/fim da chave
+  visible_key_chars: 4
+  
+  # Produtos suportados para ativação legítima
+  supported_products:
+    windows:
+      name: "Microsoft Windows"
+      script_path: "%windir%\\system32\\slmgr.vbs"
+      commands:
+        install_key: "/ipk"
+        activate: "/ato"
+        status: "/xpr"
+    
+    office:
+      name: "Microsoft Office"
+      script_paths:
+        - "C:\\Program Files\\Microsoft Office\\Office16\\OSPP.VBS"
+        - "C:\\Program Files (x86)\\Microsoft Office\\Office16\\OSPP.VBS"
+        - "C:\\Program Files\\Microsoft Office\\Office15\\OSPP.VBS"
+        - "C:\\Program Files (x86)\\Microsoft Office\\Office15\\OSPP.VBS"
+      commands:
+        install_key: "/inpkey:"
+        activate: "/act"
+        status: "/dstatus"
+  
+  # Timeout para comandos de ativação
+  activation_timeout: 60000
+  
+  # Armazenamento seguro de chaves (DPAPI)
+  secure_storage:
+    enabled: true
+    key_prefix: "PurusWin_"
+
+# Configurações de Antivírus
+antivirus:
+  # Caminho do Windows Defender
+  defender_path: "C:\\Program Files\\Windows Defender\\MpCmdRun.exe"
+  
+  # Tipos de scan suportados
+  scan_types:
+    quick:
+      name: "Verificação Rápida"
+      argument: "-Scan -ScanType 1"
+      estimated_duration: 300  # segundos
+    
+    full:
+      name: "Verificação Completa"
+      argument: "-Scan -ScanType 2"
+      estimated_duration: 3600  # segundos
+    
+    custom:
+      name: "Verificação Personalizada"
+      argument: "-Scan -ScanType 3 -File"
+      estimated_duration: 1800  # segundos
+  
+  # Diretório para relatórios de scan
+  reports_directory: "./Logs/antivirus_reports"
+  
+  # Timeout para scans em milissegundos
+  scan_timeout: 7200000  # 2 horas
+  
+  # Gerar relatório JSON
+  generate_json_report: true
+
+# Configurações de Limpeza
+cleanup:
+  # Diretórios temporários para limpeza
+  temp_directories:
+    - "%TEMP%"
+    - "%WINDIR%\\Temp"
+    - "%LOCALAPPDATA%\\Temp"
+    - "%USERPROFILE%\\AppData\\Local\\Temp"
+  
+  # Cache de navegadores
+  browser_cache_paths:
+    chrome:
+      - "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Cache"
+      - "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Code Cache"
+    
+    firefox:
+      - "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\cache2"
+    
+    edge:
+      - "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Cache"
+      - "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Code Cache"
+    
+    ie:
+      - "%LOCALAPPDATA%\\Microsoft\\Windows\\INetCache"
+  
+  # Arquivos a preservar (padrões glob)
+  preserve_patterns:
+    - "*.log"
+    - "*.ini"
+    - "*.config"
+    - "desktop.ini"
+    - "thumbs.db"
+  
+  # Tamanho mínimo para confirmação (bytes)
+  confirm_if_larger_than: 104857600  # 100MB
+  
+  # Criar backup antes da limpeza
+  create_backup: false
+
+# Configurações de Rede
+network:
+  # Hosts para teste de conectividade
+  test_hosts:
+    - "8.8.8.8"          # Google DNS
+    - "1.1.1.1"          # Cloudflare DNS
+    - "208.67.222.222"   # OpenDNS
+    - "microsoft.com"    # Microsoft
+    - "google.com"       # Google
+  
+  # Timeout para ping em milissegundos
+  ping_timeout: 5000
+  
+  # Número de pings por host
+  ping_count: 4
+  
+  # Timeout para DNS lookup
+  dns_timeout: 10000
+
+# Configurações de Atualização
+update:
+  # URL do repositório para verificar atualizações
+  repository_url: "https://api.github.com/repos/usuario/puruswin/releases/latest"
+  
+  # Verificar atualizações automaticamente
+  auto_check: true
+  
+  # Intervalo de verificação em horas
+  check_interval: 24
+  
+  # Baixar atualizações automaticamente
+  auto_download: false
+  
+  # Diretório para downloads de atualização
+  download_directory: "./Updates"
+
+# Configurações de Segurança
+security:
+  # Verificar assinatura digital de executáveis
+  verify_digital_signature: true
+  
+  # Verificar certificados SSL/TLS
+  verify_ssl_certificates: true
+  
+  # Mascarar dados sensíveis nos logs
+  mask_sensitive_data: true
+  
+  # Padrões de dados sensíveis (regex)
+  sensitive_patterns:
+    - "(?i)(password|senha|pwd)\\s*[:=]\\s*\\S+"
+    - "(?i)(key|chave)\\s*[:=]\\s*[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}"
+    - "(?i)(token|auth)\\s*[:=]\\s*\\S+"
+  
+  # Criptografia para armazenamento local
+  encryption:
+    algorithm: "AES-256-GCM"
+    use_dpapi: true
+
+# Configurações de Interface
+interface:
+  # Cores do console (se suportado)
+  colors:
+    success: "Green"
+    warning: "Yellow"
+    error: "Red"
+    info: "Cyan"
+    prompt: "White"
+  
+  # Largura da barra de progresso
+  progress_bar_width: 50
+  
+  # Mostrar tempo decorrido
+  show_elapsed_time: true
+  
+  # Mostrar ETA (tempo estimado)
+  show_eta: true
+  
+  # Confirmações interativas
+  interactive_confirmations: true
+  
+  # Timeout para confirmações (segundos, 0 = sem timeout)
+  confirmation_timeout: 30
+
+# Configurações Avançadas
+advanced:
+  # Buffer size para operações de arquivo (bytes)
+  file_buffer_size: 8192
+  
+  # Número máximo de threads para operações paralelas
+  max_parallel_operations: 4
+  
+  # Usar compressão para logs
+  compress_logs: true
+  
+  # Formato de data/hora para logs
+  datetime_format: "yyyy-MM-dd HH:mm:ss.fff"
+  
+  # Cultura/localização
+  culture: "pt-BR"
+  
+  # Encoding padrão para arquivos
+  default_encoding: "UTF-8"
+
+# Configurações de Desenvolvimento/Debug
+debug:
+  # Habilitar modo debug
+  enabled: false
+  
+  # Logs detalhados
+  verbose_logging: false
+  
+  # Salvar dumps de erro
+  save_error_dumps: false
+  
+  # Diretório para dumps
+  dumps_directory: "./Logs/dumps"
+  
+  # Simular falhas para testes
+  simulate_failures: false
